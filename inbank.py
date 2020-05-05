@@ -1,16 +1,12 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from time import sleep, time
+from datetime import timedelta
 import csv
 import re
 
-starting_time = time()
 
-chrome = webdriver.Chrome()
-
-amounts = [2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
-terms = [6, 12, 24, 36, 48, 60, 72]
-
+#Functions defined here:
 def set_amount(amount):
     sum_field = chrome.find_element_by_id("amount")
     sum_field.clear()
@@ -69,7 +65,17 @@ def do_erryfin(amounts, terms):
         raise err2
         chrome.close()
 
+
+#Code starts here:
+starting_time = time()
+
+chrome = webdriver.Chrome()
+
+amounts = [2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+terms = [6, 12, 24, 36, 48, 60, 72]
+
 do_erryfin(amounts, terms)
+
 ending_time = time()
-total_time = str((ending_time - starting_time)/60)
+total_time = str(timedelta(seconds=ending_time - starting_time))
 print(f"Time to crunch through Inbank's data is {total_time} minutes.")

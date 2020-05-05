@@ -1,15 +1,10 @@
 from selenium import webdriver
 from time import sleep, time
+from datetime import timedelta
 import csv
-import re
 
-starting_time = time()
 
-chrome = webdriver.Chrome()
-
-amounts = [100, 500, 1000, 2000]
-terms = [3, 6, 12, 24, 36, 48]
-
+#Functions defined here:
 def set_term(term):
     sum_field = chrome.find_element_by_xpath('//*[@id="durations-slider"]/div[1]/div/div/input')
     sum_field.click()
@@ -97,7 +92,17 @@ def do_erryfin(amounts, terms):
                 pass
     chrome.close()
 
+
+#Code starts here:
+starting_time = time()
+
+chrome = webdriver.Chrome()
+
+amounts = [100, 500, 1000, 2000]
+terms = [3, 6, 12, 24, 36, 48]
+
 do_erryfin(amounts, terms)
+
 ending_time = time()
-total_time = str((ending_time - starting_time)/60)
+total_time = str(timedelta(seconds=ending_time - starting_time))
 print(f"Time to crunch through Bobute's data is {total_time} minutes.")

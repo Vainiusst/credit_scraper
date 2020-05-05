@@ -2,26 +2,18 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
 from time import sleep, time
+from datetime import timedelta
 import csv
 import re
 
-starting_time = time()
 
-chrome = webdriver.Chrome()
-
-# 7.332,
-
-amounts = [0, 58.656, 74.448, 141, 100.956, 19.74, 20.304, 28.2, 28.2, 28.2, 28.2, 28.2]
-terms = [3, 6, 12, 24, 36, 48, 60]
-
-chrome.get("https://www.momentcredit.lt")
-sleep(2)
-
+#Functions defined here:
 def set_amount(amount):
     #full slider length - 564px
     slider = chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[3]')
     move = ActionChains(chrome)
-    move.drag_and_drop_by_offset(slider, amount, 0).perform()
+    offset = amount * sb_width
+    move.drag_and_drop_by_offset(slider, offset, 0).perform()
 
 def set_term(term):
     selector = Select(chrome.find_element_by_xpath('//*[@id="duration"]'))
@@ -81,23 +73,23 @@ def do_erryfin(amounts, terms):
     for term in terms:
         set_term(term)
         if term == 3:
-            set_amount(-274.668)
+            set_amount(-0.487) #274.668
             for amount in amounts:
                 set_amount(amount)
                 write_content(term)
         elif term in [6, 12, 24]:
-            set_amount(-556.668)
+            set_amount(-0.987) #556.668
             for amount in amounts:
                 set_amount(amount)
                 write_content(term)
         elif term == 36:
-            set_amount(-423)
+            set_amount(-0.75) #423
             write_content(term)
             for amount in amounts[3:]:
                 set_amount(amount)
                 write_content(term)
         else:
-            set_amount(-282)
+            set_amount(-0.5) #282
             write_content(term)
             for amount in amounts[4:]:
                 set_amount(amount)
@@ -106,7 +98,20 @@ def do_erryfin(amounts, terms):
     chrome.close()
 
 
+#Code starts here
+starting_time = time()
+
+chrome = webdriver.Chrome()
+
+amounts = [0, 0.104, 0.132, 0.25, 0.179, 0.035, 0.036, 0.05, 0.05, 0.05, 0.05, 0.05]
+terms = [3, 6, 12, 24, 36, 48, 60]
+
+chrome.get("https://www.momentcredit.lt")
+sleep(2)
+sb_width = chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[1]').size["width"]
+
 do_erryfin(amounts, terms)
+
 ending_time = time()
-total_time = str((ending_time - starting_time)/60)
+total_time = str(timedelta(seconds=ending_time - starting_time))
 print(f"Time to crunch through Moment Credit's data is {total_time} minutes.")

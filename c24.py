@@ -1,22 +1,12 @@
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from time import sleep, time
+from datetime import timedelta
 import csv
 import re
 
-starting_time = time()
 
-chrome = webdriver.Chrome()
-chrome.get("https://www.credit24.lt/")
-sleep(5)
-move = ActionChains(chrome)
-slider = chrome.find_element_by_xpath('//*[@id="app-widget"]/div/div[1]/div/div[3]/input')
-slider_bar = chrome.find_element_by_xpath('//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[3]/div/div[2]/div/div[1]')
-sb_size = slider_bar.size
-sb_width = sb_size["width"]
-
-amounts = [-0.183673, 0.0816327, 0.1020403, 0.204082, 0.204082, 0.204082, 0.204082]
-
+#Functions defined here:
 def read_installment():
     installment = chrome.find_element_by_xpath('//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[4]/div/span/div/div')
     installment_iso = installment.get_attribute("innerHTML")[:-1]
@@ -49,13 +39,28 @@ def write_content():
 def do_erryfin(amounts):
     for amount in amounts:
         offset = sb_width*amount
-        move.drag_and_drop_by_offset(slider, offset, 0).perform()
+        move.move_to_element_with_offset(slider_bar, offset, 0).click().perform()
         sleep(2)
         write_content()
         sleep(2)
     chrome.close()
 
+
+#Code starts here
+starting_time = time()
+
+chrome = webdriver.Chrome()
+chrome.get("https://credit24.lt/lt/n/?utm_expid=.w5tpGC0HQ1C6Wf1F6aQO-g.0&utm_referrer")
+sleep(5)
+move = ActionChains(chrome)
+slider_bar = chrome.find_element_by_xpath('//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[3]/div/div[2]/div/div')
+sb_size = slider_bar.size
+sb_width = sb_size["width"]
+
+amounts = [0, 0.0816327, 0.183673, 0.387755, 0.591837, 0.795918, 1]
+
 do_erryfin(amounts)
+
 ending_time = time()
-total_time = str((ending_time - starting_time)/60)
+total_time = str(timedelta(seconds=ending_time - starting_time))
 print(f"Time to crunch through Credit24's data is {total_time} minutes.")

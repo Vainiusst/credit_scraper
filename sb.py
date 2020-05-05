@@ -1,14 +1,10 @@
 from selenium import webdriver
 from time import sleep, time
+from datetime import timedelta
 import csv
 
-starting_time = time()
 
-chrome = webdriver.Chrome()
-
-amounts = [500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
-terms = [3, 6, 12, 24, 36, 48, 60, 72, 84]
-
+#Functions defined here:
 def get_page():
     chrome.maximize_window()
     chrome.get("https://www.sblizingas.lt/vartojimo-kreditas/kredito-gavimas/")
@@ -78,7 +74,7 @@ def do_erryfin(amounts, terms):
             set_term(term)
             for amount in amounts:
                 set_amount(amount)
-                sleep(1)
+                sleep(2)
                 write_content(amount, term)
                 sleep(2)
         chrome.close()
@@ -89,7 +85,17 @@ def do_erryfin(amounts, terms):
         raise err2
         chrome.close()
 
+
+#Code starts here:
+starting_time = time()
+
+chrome = webdriver.Chrome()
+
+amounts = [500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+terms = [3, 6, 12, 24, 36, 48, 60, 72, 84]
+
 do_erryfin(amounts, terms)
+
 ending_time = time()
-total_time = str((ending_time - starting_time)/60)
+total_time = str(timedelta(seconds=ending_time - starting_time))
 print(f"Time to crunch through SB's data is {total_time} minutes.")

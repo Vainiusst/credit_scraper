@@ -1,33 +1,23 @@
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from time import sleep, time
+from datetime import timedelta
 import csv
 import re
 
-starting_time = time()
 
-chrome = webdriver.Chrome()
-
-#offsets (pixels), that set the slider at the correct position for the necessary amount/term
-
-amounts= [-543, 108.6, 108.6, 108.6, 108.6, 54.3, 54.3]
-
-terms = [-155.14, 77.59, 77.59, 77.59, 77.59, 77.59, 77.59, 77.59]
-
-def start_up():
-    chrome.get("https://www.smspinigai.lt")
-    nuolatinis = chrome.find_element_by_xpath('/html/body/div[1]/div[1]/main/section/div/div[2]/div/ul/li[2]')
-    nuolatinis.click()
-
+#Functions defined here:
 def set_amount(amount):
     slider = chrome.find_element_by_xpath('//*[@id="slider_summa"]/div[2]/div[2]/div/div[1]')
     move_amt = ActionChains(chrome)
-    move_amt.click_and_hold(slider).move_by_offset(amount, 0).release().perform()
+    offset = amount * bar_width
+    move_amt.drag_and_drop_by_offset(slider, offset, 0).perform()
 
 def set_term(term):
     slider = chrome.find_element_by_xpath('//*[@id="slider_period"]/div[2]/div[2]/div/div[1]')
     move_term = ActionChains(chrome)
-    move_term.click_and_hold(slider).move_by_offset(term, 0).release().perform()
+    offset = term * bar_width
+    move_term.drag_and_drop_by_offset(slider, offset, 0).perform()
 
 def open_dets():
     dets = chrome.find_element_by_xpath('/html/body/div[1]/div[1]/main/section/div/div[2]/div/div[4]/a')
@@ -95,23 +85,36 @@ def close_dets():
     close_bttn.click()
 
 def do_erryfin(amounts, terms):
-    start_up()
     kill_cookies()
     sleep(1)
     for term in terms:
         set_term(term)
         for amount in amounts:
             set_amount(amount)
-            sleep(1)
+            sleep(2)
             open_dets()
-            sleep(1)
+            sleep(2)
             write_content()
             close_dets()
             sleep(1)
     chrome.close()
 
 
+#Code starts here:
+starting_time = time()
+
+chrome = webdriver.Chrome()
+chrome.get("https://www.smspinigai.lt")
+nuolatinis = chrome.find_element_by_xpath('/html/body/div[1]/div[1]/main/section/div/div[2]/div/ul/li[2]')
+nuolatinis.click()
+bar_width = chrome.find_element_by_xpath('//*[@id="slider_summa"]/div[2]/div[1]').size["width"]
+sleep(5)
+
+amounts= [-1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.1]
+terms = [-0.2857, 0.1429, 0.1429, 0.1429, 0.1429, 0.1429, 0.1429, 0.1429]
+
 do_erryfin(amounts, terms)
+
 ending_time = time()
-total_time = str((ending_time - starting_time)/60)
+total_time = str(timedelta(seconds=ending_time - starting_time))
 print(f"Time to crunch through Smspinigai data is {total_time} minutes.")

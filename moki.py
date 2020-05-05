@@ -1,14 +1,10 @@
 from selenium import webdriver
 from time import sleep, time
+from datetime import timedelta
 import csv
 
-starting_time = time()
 
-chrome = webdriver.Chrome()
-
-amounts = [500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
-terms = [12, 24, 36, 48, 60, 72]
-
+#Functions defined here:
 def set_amount(amount):
     sum_field = chrome.find_element_by_xpath("/html/body/main/div/div[1]/form/div/div/div[5]/div/div[1]/input")
     sum_field.click()
@@ -84,7 +80,17 @@ def do_erryfin(amounts, terms):
         raise err2
         chrome.close()
 
+
+#Code starts here:
+starting_time = time()
+
+chrome = webdriver.Chrome()
+
+amounts = [500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+terms = [12, 24, 36, 48, 60, 72]
+
 do_erryfin(amounts, terms)
+
 ending_time = time()
-total_time = str((ending_time - starting_time)/60)
+total_time = str(timedelta(seconds=ending_time - starting_time))
 print(f"Time to crunch through Mokilizingas' data is {total_time} minutes.")
