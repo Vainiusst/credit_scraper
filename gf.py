@@ -1,11 +1,19 @@
 from selenium import webdriver
-from time import sleep, time
+from selenium.webdriver.common.by import By as by
+from selenium.webdriver.support.ui import WebDriverWait as wdw
+from selenium.webdriver.support import expected_conditions as ec
+from time import time
 from datetime import timedelta
 import csv
 import re
 
 
 #Functions defined here:
+
+def waiter():
+    path = '//*[@id="calculator-main"]/form/div[2]/button'
+    wdw(chrome, 10).until(ec.element_to_be_clickable((by.XPATH, path)))
+
 def set_amount(amount):
     sum_field = chrome.find_element_by_id("dCreditSum")
     sum_field.click()
@@ -29,7 +37,6 @@ def set_term(term):
 def read_installment():
     installment = chrome.find_element_by_id("monthlyPay")
     installment_amount = installment.get_attribute("innerHTML")
-    #print(installment_amount)
     return installment_amount
 
 def read_interest():
@@ -58,25 +65,16 @@ def write_content(amount, term):
         csv_writer.writerow([combo, installment, interest, APR, admin])
 
 def do_erryfin(amounts, terms):
-    try:
-        #chrome.maximize_window()
-        chrome.get("https://kreditasinternetu.gf.lt/?_ga=2.102102470.679028275.1586548011-1260783365.1586548011#vartojimui")
-        for term in terms:
-            set_term(term)
-            sleep(2)
-            for amount in amounts:
-                set_amount(amount)
-                sleep(2)
-                write_content(amount, term)
-                sleep(3)
-        chrome.close()
-    except NameError as err1:
-        raise err1
-        chrome.close()
-    except TypeError as err2:
-        raise err2
-        chrome.close()
-
+    chrome.maximize_window()
+    chrome.get("https://kreditasinternetu.gf.lt/#vartojimui")
+    waiter()
+    for term in terms:
+        set_term(term)
+        for amount in amounts:
+            set_amount(amount)
+            waiter()
+            write_content(amount, term)
+    chrome.close()
 
 #Code starts here:
 starting_time = time()

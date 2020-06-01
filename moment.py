@@ -1,15 +1,25 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
-from time import sleep, time
+from selenium.webdriver.common.by import By as by
+from selenium.webdriver.support.ui import WebDriverWait as wdw
+from selenium.webdriver.support import expected_conditions as ec
+from time import time
 from datetime import timedelta
 import csv
 import re
 
 
 #Functions defined here:
+
+def cookie_monster():
+    path = '//*[@id="pre_header"]/div/div[2]/input'
+    wdw(chrome, 10).until(ec.element_to_be_clickable((by.XPATH, path)))
+    chrome.find_element_by_xpath(path).click()
+
 def set_amount(amount):
     #full slider length - 564px
+    sb_width = chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[1]').size["width"]
     slider = chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[3]')
     move = ActionChains(chrome)
     offset = amount * sb_width
@@ -18,34 +28,29 @@ def set_amount(amount):
 def set_term(term):
     selector = Select(chrome.find_element_by_xpath('//*[@id="duration"]'))
     selector.select_by_value(str(term))
-    sleep(2)
 
 def read_installment():
     std_ex = chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
     iso_str = re.search('mėnesinė įmoka būtų \d+.*\d*,+\d+ EUR', std_ex).group()
     installment = re.search('\d+.*\d*,+\d+', iso_str).group().replace(".", "")
-    print(installment)
     return installment
 
 def read_interest():
     std_ex = chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
     iso_str = re.search('palūkanos būtų \d+,*\d* %', std_ex).group()
     interest = re.search('\d+,*\d*', iso_str).group()
-    print(interest)
     return interest
 
 def read_APR():
     std_ex = chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
     iso_str = re.search('BVKKMN . \d+,\d+%', std_ex).group()
     APR = re.search('\d+,\d+', iso_str).group()
-    print(APR)
     return APR
 
 def read_admin():
     std_ex = chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
     iso_str = re.search('ir \d,*\d* Eur/mėn\.', std_ex).group()
     admin = re.search('\d,*\d*', iso_str).group()
-    print(admin)
     return admin
 
 def suma():
@@ -66,10 +71,12 @@ def write_content(term):
         admin = read_admin()
         csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow([combo, installment, interest, APR, admin])
-        sleep(2)
 
 
 def do_erryfin(amounts, terms):
+    chrome.maximize_window()
+    chrome.get("https://www.momentcredit.lt")
+    cookie_monster()
     for term in terms:
         set_term(term)
         if term == 3:
@@ -94,7 +101,6 @@ def do_erryfin(amounts, terms):
             for amount in amounts[4:]:
                 set_amount(amount)
                 write_content(term)
-        sleep(1)
     chrome.close()
 
 
@@ -105,10 +111,6 @@ chrome = webdriver.Chrome()
 
 amounts = [0, 0.104, 0.132, 0.25, 0.179, 0.035, 0.036, 0.05, 0.05, 0.05, 0.05, 0.05]
 terms = [3, 6, 12, 24, 36, 48, 60]
-
-chrome.get("https://www.momentcredit.lt")
-sleep(2)
-sb_width = chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[1]').size["width"]
 
 do_erryfin(amounts, terms)
 

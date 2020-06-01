@@ -1,10 +1,27 @@
 from selenium import webdriver
-from time import sleep, time
+from selenium.webdriver.common.by import By as by
+from selenium.webdriver.support.ui import WebDriverWait as wdw
+from selenium.webdriver.support import expected_conditions as ec
+from time import time
 from datetime import timedelta
 import csv
 
 
 #Functions defined here:
+
+def waiter(temp):
+    path = '/html/body/main/div/div[1]/form/div/div/div[7]/div[2]/span'
+    wdw(chrome, 10).until_not(ec.text_to_be_present_in_element((by.XPATH, path), temp))
+
+def waiter_start():
+    path = '/html/body/main/div/div[1]/form/div/div/div[7]/div[2]/span'
+    wdw(chrome, 10).until(ec.text_to_be_present_in_element((by.XPATH, path), '65.57'))
+
+def cookie_monster():
+    path = '//*[@id="cookie-btns"]/a[1]'
+    wdw(chrome, 10).until(ec.element_to_be_clickable((by.XPATH, path)))
+    chrome.find_element_by_xpath(path).click()
+
 def set_amount(amount):
     sum_field = chrome.find_element_by_xpath("/html/body/main/div/div[1]/form/div/div/div[5]/div/div[1]/input")
     sum_field.click()
@@ -28,25 +45,21 @@ def set_term(term):
 def read_installment():
     installment = chrome.find_element_by_xpath("/html/body/main/div/div[1]/form/div/div/div[7]/div[2]/span").get_attribute("innerHTML")
     installment_comma = installment.replace(".", ",")
-    # print(installment_comma)
     return installment_comma
 
 def read_interest():
     interest = chrome.find_element_by_xpath('/html/body/main/div/div[1]/form/div/div/div[8]/p/span[3]').get_attribute("innerHTML")
     interest_comma = interest.replace(".", ",")[:-2]
-    # print(interest_comma)
     return interest_comma
 
 def read_APR():
     APR = chrome.find_element_by_xpath('/html/body/main/div/div[1]/form/div/div/div[8]/p/span[6]').get_attribute("innerHTML")
     APR_comma = APR.replace(".", ",")[:-2]
-    # print(APR_comma)
     return APR_comma
 
 def read_admin():
     admin = chrome.find_element_by_xpath('/html/body/main/div/div[1]/form/div/div/div[8]/p/span[5]').get_attribute("innerHTML")
     admin_comma = admin.replace(".", ",")[:-2]
-    # print(APR_comma)
     return admin_comma
 
 def write_content(amount, term):
@@ -59,26 +72,20 @@ def write_content(amount, term):
         csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow([combo, installment, interest, APR, admin])
 
-
 def do_erryfin(amounts, terms):
-    try:
-        chrome.get("https://www.mokilizingas.lt/")
-        sleep(5)
-        for term in terms:
-            set_term(term)
-            sleep(2)
-            for amount in amounts:
-                set_amount(amount)
-                sleep(2)
-                write_content(amount, term)
-                sleep(2)
-        chrome.close()
-    except NameError as err1:
-        raise err1
-        chrome.close()
-    except TypeError as err2:
-        raise err2
-        chrome.close()
+    chrome.maximize_window()
+    chrome.get("https://www.mokilizingas.lt/")
+    waiter_start()
+    cookie_monster()
+    for term in terms:
+        set_term(term)
+        for amount in amounts:
+            set_amount(amount)
+            temp = chrome.find_element_by_xpath(
+                '/html/body/main/div/div[1]/form/div/div/div[7]/div[2]/span').get_attribute('innerHTML')
+            waiter(temp)
+            write_content(amount, term)
+    chrome.close()
 
 
 #Code starts here:

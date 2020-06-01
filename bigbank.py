@@ -1,5 +1,6 @@
 from selenium import webdriver
-from time import sleep, time
+from selenium.webdriver.support.ui import WebDriverWait
+from time import time
 from datetime import timedelta
 import csv
 
@@ -38,27 +39,23 @@ def write_content(amount, term):
         csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow([combo, installment])
 
+def waiter():
+    WebDriverWait(chrome, 5).until(lambda x: x.find_element_by_xpath('//*[@id="vartojimo-paskolos-skaiciukle"]/div[1]/div/div[2]/div/div/div[3]/div/p[2]/span'))
+
 
 def do_erryfin(amounts, terms):
-    try:
-        chrome.maximize_window()
-        chrome.get("https://www.bigbank.lt/vartojimo-paskola/")
-        sleep(5)
-        for term in terms:
-            set_term(term)
-            sleep(1)
-            for amount in amounts:
-                set_amount(amount)
-                sleep(1)
-                write_content(amount, term)
-                sleep(1)
-        chrome.close()
-    except NameError as err1:
-        raise err1
-        chrome.close()
-    except TypeError as err2:
-        raise err2
-        chrome.close()
+    chrome.maximize_window()
+    chrome.get("https://www.bigbank.lt/vartojimo-paskola/")
+    waiter()
+    for term in terms:
+        set_term(term)
+        waiter()
+        for amount in amounts:
+            set_amount(amount)
+            waiter()
+            write_content(amount, term)
+            waiter()
+    chrome.close()
 
 
 #Code starts here:
