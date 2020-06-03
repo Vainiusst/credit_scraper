@@ -126,4 +126,4 @@ do_erryfin(amounts, terms)
 
 ending_time = time()
 total_time = str(timedelta(seconds=ending_time - starting_time))
-print(f"Time to crunch through Bigbank's data is {total_time} minutes.")
+print(f"Time to crunch through Bobute's data is {total_time} minutes.")
