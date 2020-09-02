@@ -22,6 +22,10 @@ def waiter(temp):
     path = '//*[@id="kg_modal_mi"]'
     wdw(chrome, 10).until_not(ec.text_to_be_present_in_element((by.XPATH, path), temp))
 
+def waiter_50():
+    path = '//*[@id="kg_modal_mi"]'
+    wdw(chrome, 10).until(ec.text_to_be_present_in_element((by.XPATH, path), '--'))
+
 def set_amount(amount):
     sum_field = chrome.find_element_by_xpath('//*[@id="modal_credit_output"]')
     sum_field.click()
@@ -74,12 +78,21 @@ def do_erryfin(amounts, terms):
     get_page()
     for term in terms:
         set_term(term)
+        temp = chrome.find_element_by_xpath('//*[@id="kg_modal_mi"]').get_attribute("innerHTML")
         for amount in amounts:
-            temp = chrome.find_element_by_xpath('//*[@id="kg_modal_mi"]').get_attribute("innerHTML")
-            set_amount(amount)
-            waiter(temp)
-            write_content(amount, term)
-            #temp = read_installment().replace(",", ".")
+            if amount == 500 and term >= 36:
+                pass
+            else:
+                if amount == 50 and temp != "--":
+                    set_amount(amount)
+                    waiter_50()
+                    write_content(amount, term)
+                    temp = chrome.find_element_by_xpath('//*[@id="kg_modal_mi"]').get_attribute("innerHTML")
+                else:
+                    set_amount(amount)
+                    waiter(temp)
+                    write_content(amount, term)
+                    temp = chrome.find_element_by_xpath('//*[@id="kg_modal_mi"]').get_attribute("innerHTML")
     chrome.close()
 
 #Code starts here:
@@ -87,7 +100,7 @@ starting_time = time()
 
 chrome = webdriver.Chrome()
 
-amounts = [500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+amounts = [50, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
 terms = [3, 6, 12, 24, 36, 48, 60, 72, 84]
 
 do_erryfin(amounts, terms)

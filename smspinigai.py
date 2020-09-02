@@ -22,15 +22,20 @@ def nuolatinis():
     wdw(chrome, 10).until(ec.element_to_be_clickable((by.XPATH, path)))
     chrome.find_element_by_xpath(path).click()
 
+def vartojimo():
+    path = '/html/body/div[1]/div[1]/main/section/ul/li[3]/a'
+    wdw(chrome, 10).until(ec.element_to_be_clickable((by.XPATH, path)))
+    chrome.find_element_by_xpath(path).click()
+
 def set_amount(amount):
-    bar_width = chrome.find_element_by_xpath('//*[@id="slider_summa"]/div[2]/div[1]').size["width"]
+    bar_width = chrome.find_element_by_xpath('//*[@id="slider_summa"]/div[2]').size["width"]
     slider = chrome.find_element_by_xpath('//*[@id="slider_summa"]/div[2]/div[2]/div/div[1]')
     move_amt = ActionChains(chrome)
     offset = amount * bar_width
     move_amt.drag_and_drop_by_offset(slider, offset, 0).perform()
 
 def set_term(term):
-    bar_width = chrome.find_element_by_xpath('//*[@id="slider_summa"]/div[2]/div[1]').size["width"]
+    bar_width = chrome.find_element_by_xpath('//*[@id="slider_period"]/div[2]/div[1]').size["width"]
     slider = chrome.find_element_by_xpath('//*[@id="slider_period"]/div[2]/div[2]/div/div[1]')
     move_term = ActionChains(chrome)
     offset = term * bar_width
@@ -104,19 +109,30 @@ def do_erryfin(amounts, terms):
     chrome.get("https://www.smspinigai.lt")
     cookie_monster()
     nuolatinis()
+    vartojimo()
+    counter = 0
     for term in terms:
         set_term(term)
         for amount in amounts:
-            temp = chrome.find_element_by_xpath('//*[@id="calc_monthly"]').get_attribute("innerHTML")
-            set_amount(amount)
-            try:
-                waiter(temp)
-            except TimeoutException:
-                pass
-            open_dets()
-            waiter_dets()
-            write_content()
-            close_dets()
+            if counter == 0:
+                set_amount(amount)
+                open_dets()
+                waiter_dets()
+                write_content()
+                close_dets()
+                counter += 1
+            else:
+                temp = chrome.find_element_by_xpath('//*[@id="calc_monthly"]').get_attribute("innerHTML")
+                set_amount(amount)
+                try:
+                    waiter(temp)
+                except selenium.common.exceptions.TimeoutException:
+                    pass
+                open_dets()
+                waiter_dets()
+                write_content()
+                close_dets()
+                counter += 1
     chrome.close()
 
 
@@ -125,7 +141,7 @@ starting_time = time()
 
 chrome = webdriver.Chrome()
 
-amounts= [-1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.1]
+amounts= [-1, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1, 0.0667, 0.0667, 0.0667]
 terms = [-0.2857, 0.1429, 0.1429, 0.1429, 0.1429, 0.1429, 0.1429, 0.1429]
 
 do_erryfin(amounts, terms)

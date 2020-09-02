@@ -14,6 +14,11 @@ def waiter():
     path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[3]/div/div[1]/div/div/div/div/span'
     wdw(chrome, 5).until(ec.text_to_be_present_in_element((by.XPATH, path), "500 €"))
 
+def cookie_monster():
+    path = '//*[@id="onetrust-accept-btn-handler"]'
+    wdw(chrome, 5).until(ec.element_to_be_clickable((by.XPATH, path)))
+    chrome.find_element_by_xpath(path).click()
+
 def read_installment():
     installment = chrome.find_element_by_xpath('//*[@id="mainBanner"]/div/div/div/div/div/div/div/div/div/div/div[4]/div/span/div/div')
     installment_iso = installment.get_attribute("innerHTML")[:-1]
@@ -43,6 +48,7 @@ def write_content():
 def do_erryfin(amounts):
     chrome.get("https://credit24.lt/lt/n/?utm_expid=.w5tpGC0HQ1C6Wf1F6aQO-g.0&utm_referrer")
     waiter()
+    cookie_monster()
     move = ActionChains(chrome)
     slider_bar = chrome.find_element_by_xpath(
         '//*[@id="mainBanner"]/div/div/div/div/div/div/div/div/div/div/div[3]/div/div[2]/div/div[1]')

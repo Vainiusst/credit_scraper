@@ -71,9 +71,12 @@ def do_erryfin(amounts, terms):
     for term in terms:
         set_term(term)
         for amount in amounts:
-            set_amount(amount)
-            waiter()
-            write_content(amount, term)
+            if amount == 100 and term >= 72:
+                pass
+            else:
+                set_amount(amount)
+                waiter()
+                write_content(amount, term)
     chrome.close()
 
 #Code starts here:
@@ -83,6 +86,10 @@ chrome = webdriver.Chrome()
 
 amounts = [100, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
 terms = [3, 6, 12, 24, 36, 48, 60, 72, 84]
+
+# amounts = [500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+# terms = [72, 84]
+
 
 do_erryfin(amounts, terms)
 
