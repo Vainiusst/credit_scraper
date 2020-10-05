@@ -10,7 +10,7 @@ import csv
 #Functions defined here:
 
 def cookie_monster():
-    path = '//*[@id="root"]/div[4]/div/div[2]/button[2]'
+    path = '//*[@id="root"]/div[4]/div/button'
     wdw(chrome, 10).until(ec.element_to_be_clickable((by.XPATH, path)))
     chrome.find_element_by_xpath(path).click()
 
@@ -24,31 +24,21 @@ def kill_the_messenger():
 def set_amount(amount):
     sum_field = chrome.find_element_by_xpath('//*[@id="root"]/div[1]/div/div[1]/div[1]/div/div[3]/div[2]/div[1]/div[1]/div[1]/div[2]/input')
     sum_field.clear()
-    # sum_field.send_keys(u'\ue003')
-    # sum_field.send_keys(u'\ue003')
-    # sum_field.send_keys(u'\ue003')
-    # sum_field.send_keys(u'\ue017')
-    # sum_field.send_keys(u'\ue017')
-    # sum_field.send_keys(u'\ue017')
     sum_field.send_keys(str(amount))
     sum_field.send_keys(u'\ue007')
-    # chrome.find_element_by_xpath('//*[@id="vartojimo-paskolos-skaiciukle"]/div[1]/div/div[2]/div/div/div[3]/div/p[1]/strong').click()
 
 def set_term(term):
     sum_field = chrome.find_element_by_xpath('//*[@id="root"]/div[1]/div/div[1]/div[1]/div/div[3]/div[2]/div[1]/div[2]/div[1]/div[2]/input')
     sum_field.clear()
-    # sum_field.send_keys(u'\ue003')
-    # sum_field.send_keys(u'\ue017')
     sum_field.send_keys(str(term))
     sum_field.send_keys(u'\ue007')
-    # chrome.find_element_by_xpath('//*[@id="vartojimo-paskolos-skaiciukle"]/div[1]/div/div[2]/div/div/div[3]/div/p[1]/strong').click()
 
 def read_installment():
     installment = chrome.find_element_by_xpath('//*[@id="root"]/div[1]/div/div[1]/div[1]/div/div[3]/div[2]/div[2]/div/div[2]').get_attribute("innerHTML")[:-4]
     return installment
 
 def write_content(amount, term):
-    with open(r'C:\Users\Vainius\Desktop\Smauglys\credit_scraper\venv\fjordbank_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
+    with open('./fjordbank_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
         combo = f'{amount}/{term}'
         installment = read_installment()
         csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)

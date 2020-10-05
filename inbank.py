@@ -12,27 +12,27 @@ import re
 #Functions defined here:
 
 def waiter_start():
-    path = '//*[@id="loancalculator"]/div[1]/div/div[7]/p/span'
+    path = '//*[@id="loancalculator"]/div[2]/span'
     wdw(chrome, 10).until(ec.text_to_be_present_in_element((by.XPATH, path), '100.29 EUR'))
 
 def cookie_monster():
-    path = '//*[@id="__layout"]/div/div/div[2]/button'
+    path = '//*[@id="__layout"]/div/div[2]/div[2]/button[2]'
     wdw(chrome, 10).until(ec.element_to_be_clickable((by.XPATH, path)))
     chrome.find_element_by_xpath(path).click()
 
 def temp_maker():
-    temp = chrome.find_element_by_xpath('//*[@id="loancalculator"]/div[2]/p[1]').get_attribute(
+    temp = chrome.find_element_by_xpath('//*[@id="loancalculator"]/div[3]/p[1]').get_attribute(
         "innerHTML")
     temp_line = re.search('mėnesio įmoka - \d+\s*\d*.\d+', temp).group()
     temp_text = re.search('\d+\s*\d*.\d+', temp_line).group()
     return temp_text
 
 def waiter(temp):
-    path = '//*[@id="loancalculator"]/div[2]/p[1]'
+    path = '//*[@id="loancalculator"]/div[3]/p[1]'
     wdw(chrome, 10).until_not((ec.text_to_be_present_in_element((by.XPATH, path), temp)))
 
 def set_amount(amount):
-    sum_field = chrome.find_element_by_id("amount")
+    sum_field = chrome.find_element_by_xpath('//*[@id="amount"]')
     sum_field.clear()
     sum_field.send_keys(str(amount))
     sum_field.send_keys(u'\ue007')
@@ -42,24 +42,24 @@ def terms_selector(term):
     selector.select_by_value(str(term))
 
 def read_installment():
-    installment = chrome.find_element_by_xpath('//*[@id="loancalculator"]/div[1]/div/div[7]/p/span').get_attribute("innerHTML")
+    installment = chrome.find_element_by_xpath('//*[@id="loancalculator"]/div[2]/span').get_attribute("innerHTML")
     installment_comma = re.search('\d+.\d+', installment).group().replace(".", ",")
     return installment_comma
 
 def read_interest():
-    interest = chrome.find_element_by_xpath('//*[@id="loancalculator"]/div[2]/p[1]').get_attribute("innerHTML")
+    interest = chrome.find_element_by_xpath('//*[@id="loancalculator"]/div[3]/p[1]').get_attribute("innerHTML")
     interest_line = re.search('metinė palūkanų norma - \d+.\d+', interest).group()
     interest_comma = re.search('\d+.\d+', interest_line).group().replace(".", ",")
     return interest_comma
 
 def read_APR():
-    APR = chrome.find_element_by_xpath('//*[@id="loancalculator"]/div[2]/p[1]').get_attribute("innerHTML")
+    APR = chrome.find_element_by_xpath('//*[@id="loancalculator"]/div[3]/p[1]').get_attribute("innerHTML")
     APR_line = re.search('BVKKMN - \d+.\d+', APR).group()
     APR_comma = re.search('\d+.\d+', APR_line).group().replace(".", ",")
     return APR_comma
 
 def write_content(amount, term):
-    with open(r'.\inbank_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
+    with open('./inbank_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
         combo = f'{amount}/{term}'
         try:
             installment = read_installment()
@@ -90,7 +90,7 @@ starting_time = time()
 
 chrome = webdriver.Chrome()
 
-amounts = [2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+amounts = [1500, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 15000]
 terms = [6, 12, 24, 36, 48, 60, 72]
 
 do_erryfin(amounts, terms)

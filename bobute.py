@@ -21,7 +21,7 @@ def waiter_start():
     wdw(chrome, 10).until(ec.text_to_be_present_in_element((by.XPATH, path), '22 €'))
 
 def kill_the_nav_bar():
-    element = chrome.find_element_by_xpath('/html/body/div[4]/nav[1]')
+    element = chrome.find_element_by_xpath('/html/body/div[6]/nav[1]')
     chrome.execute_script("""
                 var element = arguments[0];
                 element.parentNode.removeChild(element);
@@ -71,7 +71,7 @@ def read_installment():
     return installment
 
 def write_content(amount, term):
-    with open(r'.\bobute_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
+    with open('./bobute_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
         combo = f'{amount}/{term}'
         installment = read_installment()
         interest = read_interest()
@@ -83,7 +83,11 @@ def write_content(amount, term):
 def to_read_and_write(amount, term):
     open_graph()
     write_content(amount, term)
-    chrome.execute_script("window.scrollTo(0, 0);")
+    try:
+        chrome.execute_script("window.scrollTo(0, 0);")
+        waiter_scroll()
+    except:
+        chrome.execute_script("window.scrollTo(0, 0);")
     sleep(0.75)
 
 def do_erryfin(amounts, terms):

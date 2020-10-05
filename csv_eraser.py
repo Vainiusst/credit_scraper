@@ -1,57 +1,62 @@
 import csv
 
 def bigbank_eraser():
-    with open(r".\bigbank_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./bigbank_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment"])
 
 def bobute_eraser():
-    with open(r".\bobute_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./bobute_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR","admin"])
 
 def credit24_eraser():
-    with open(r".\credit24_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./credit24_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR"])
 
 def gf_eraser():
-    with open(r".\gf_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./gf_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR","admin"])
 
 def inbank_eraser():
-    with open(r".\inbank_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./inbank_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR"])
 
 def moki_eraser():
-    with open(r".\moki_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./moki_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR","admin"])
 
 def moment_eraser():
-    with open(r".\moment_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./moment_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR","admin"])
 
 def sb_eraser():
-    with open(r".\sb_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./sb_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR","admin"])
 
 def smspinigai_eraser():
-    with open(r".\smspinigai_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./smspinigai_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR","admin"])
 
 def fjord_eraser():
-    with open(r".\fjordbank_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./fjordbank_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination", "installment"])
 
 def vivus_eraser():
-    with open(r".\vivus_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./vivus_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+        writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow(["combination","installment","interest","APR","admin"])
+
+def tfbank_eraser():
+    with open("./tfbank_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR","admin"])
 

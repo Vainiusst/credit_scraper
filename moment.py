@@ -47,11 +47,16 @@ def read_APR():
     APR = re.search('\d+,\d+', iso_str).group()
     return APR
 
-def read_admin():
+def read_admin(amount):
     std_ex = chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
-    iso_str = re.search('ir \d,*\d* Eur/mėn\.', std_ex).group()
-    admin = re.search('\d,*\d*', iso_str).group()
-    return admin
+    iso_str = re.search('ir \d+,*\d* Eur/mėn\.', std_ex).group()
+    admin_str = re.search('\d+,*\d*', iso_str).group()
+    if admin_str == '0':
+        return admin_str
+    else:
+        admin_perc = float(admin_str.replace(",", "."))*100/int(amount)
+        admin_perc_str = str(round(admin_perc, 2)).replace(".", ",")
+        return admin_perc_str
 
 def suma():
     inner = chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[3]/span/span[2]').get_attribute("innerHTML")
@@ -62,13 +67,13 @@ def suma():
         return suma
 
 def write_content(term):
-    with open(r'.\moment_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
+    with open('./moment_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
         sum = suma()
         combo = f'{sum}/{term}'
         installment = read_installment()
         interest = read_interest()
         APR = read_APR()
-        admin = read_admin()
+        admin = read_admin(sum)
         csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow([combo, installment, interest, APR, admin])
 

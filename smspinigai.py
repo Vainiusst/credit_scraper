@@ -88,7 +88,7 @@ def to_mths(string):
         return no_yrs*12
 
 def write_content():
-    with open(r'.\smspinigai_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
+    with open('./smspinigai_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
         suma = chrome.find_element_by_xpath('//*[@id="slider_summa"]/div[2]/div[2]/div/div[2]/span/span').get_attribute("innerHTML")[:-2]
         terminas_pre = chrome.find_element_by_xpath('//*[@id="slider_period"]/div[2]/div[2]/div/div[2]/span/span').get_attribute("innerHTML")
         terminas = to_mths(terminas_pre)
@@ -108,8 +108,8 @@ def do_erryfin(amounts, terms):
     chrome.maximize_window()
     chrome.get("https://www.smspinigai.lt")
     cookie_monster()
-    nuolatinis()
     vartojimo()
+    nuolatinis()
     counter = 0
     for term in terms:
         set_term(term)
@@ -126,7 +126,7 @@ def do_erryfin(amounts, terms):
                 set_amount(amount)
                 try:
                     waiter(temp)
-                except selenium.common.exceptions.TimeoutException:
+                except:
                     pass
                 open_dets()
                 waiter_dets()

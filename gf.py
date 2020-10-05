@@ -55,7 +55,7 @@ def read_admin():
     return admin_str
 
 def write_content(amount, term):
-    with open(r'.\gf_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
+    with open('./gf_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
         combo = f'{amount}/{term}'
         installment = read_installment()
         interest = read_interest()
@@ -84,7 +84,7 @@ starting_time = time()
 
 chrome = webdriver.Chrome()
 
-amounts = [100, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+amounts = [100, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 15000]
 terms = [3, 6, 12, 24, 36, 48, 60, 72, 84]
 
 # amounts = [500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]

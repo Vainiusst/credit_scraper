@@ -33,7 +33,7 @@ def read_installment():
     return installment_comma
 
 def write_content(amount, term):
-    with open(r'C:\Users\Vainius\Desktop\Smauglys\credit_scraper\venv\bigbank_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
+    with open('./bigbank_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
         combo = f'{amount}/{term}'
         installment = read_installment()
         csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -63,7 +63,7 @@ starting_time = time()
 
 chrome = webdriver.Chrome()
 
-amounts = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+amounts = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 15000]
 terms = [6, 12, 24, 36, 48, 60, 72, 84, 96]
 
 do_erryfin(amounts, terms)

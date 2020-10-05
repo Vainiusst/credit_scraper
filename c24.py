@@ -35,7 +35,7 @@ def read_APR():
     return APR_iso
 
 def write_content():
-    with open(r'.\credit24_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
+    with open('./credit24_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
         suma = chrome.find_element_by_xpath('//*[@id="mainBanner"]/div/div/div/div/div/div/div/div/div/div/div[3]/div/div[1]/div/div/div/div/span')
         suma_iso = suma.get_attribute("innerHTML")[:-2]
         combo = f'{suma_iso}/36'

@@ -77,7 +77,7 @@ def read_admin():
 
 def write_content(amount, term):
     waiter()
-    with open(r'.\vivus_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
+    with open('./vivus_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
         combo = f'{amount}/{term}'
         installment = read_installment()
         interest = read_interest()

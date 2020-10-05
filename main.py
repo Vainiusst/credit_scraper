@@ -30,7 +30,6 @@ def scraper():
         import fjord
     elif inp == 11:
         import bigbank
-        import bobute
         import c24
         import fjord
         import gf
@@ -39,6 +38,7 @@ def scraper():
         import moment
         import sb
         import smspinigai
+        import bobute
     elif inp == 12:
         import csv_eraser
     elif inp == 13:
