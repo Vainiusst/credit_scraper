@@ -5,7 +5,8 @@ import sys
 #Functions defined here:
 def scraper():
     print ("What would You like to scrape?\n1. Credit24\n2. BigBank\n3. Bobutės Paskola\n4. General Financing\n"
-           "5. InBank\n6. Mokilizingas\n7. Moment Credit\n8. SB lizingas\n9. Smspinigai\n10. Fjordbank\n 11. All\n12. Format CSV files\n13. Exit")
+            "5. InBank\n6. Mokilizingas\n7. Moment Credit\n8. SB lizingas\n9. Smspinigai\n10. Fjordbank\n 11. TF bank"
+            "\n12. Vivus.lt\n13. All\n14. Format CSV files\n15. Exit")
     inp = int(input("Enter your choice's number: "))
     start = time.time()
     if inp == 1:
@@ -29,6 +30,10 @@ def scraper():
     elif inp == 10:
         import fjord
     elif inp == 11:
+        import tfbank
+    elif inp == 12:
+        import vivus
+    elif inp == 13:
         import bigbank
         import c24
         import fjord
@@ -39,9 +44,11 @@ def scraper():
         import sb
         import smspinigai
         import bobute
-    elif inp == 12:
+        import vivus
+        import tfbank
+    elif inp == 14:
         import csv_eraser
-    elif inp == 13:
+    elif inp == 15:
         sys.exit()
     end = time.time()
     time_spent = timedelta(seconds=end-start)
