@@ -32,3 +32,9 @@
 [0527/222806.923:ERROR:process_info.cc(329)] VirtualQueryEx: Access is denied. (0x5)
 [0527/222806.926:ERROR:process_info.cc(556)] ReadMemoryInfo failed
 [0527/222806.926:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)
+[1006/102137.860:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[1006/102137.867:ERROR:exception_snapshot_win.cc(99)] thread ID 2344 not found in process
+[1006/102137.911:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[1006/102137.911:ERROR:exception_snapshot_win.cc(99)] thread ID 16840 not found in process
+[1118/175928.006:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1118/194817.960:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)

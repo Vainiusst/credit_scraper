@@ -1,5 +1,6 @@
 import csv
 
+# This module erases all of the CSV files and writes in the first line to make them ready for use by the other modules
 def bigbank_eraser():
     with open("./bigbank_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -11,7 +12,7 @@ def bobute_eraser():
         writer.writerow(["combination","installment","interest","APR","admin"])
 
 def credit24_eraser():
-    with open("./credit24_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./c24_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR"])
 
@@ -46,7 +47,7 @@ def smspinigai_eraser():
         writer.writerow(["combination","installment","interest","APR","admin"])
 
 def fjord_eraser():
-    with open("./fjordbank_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+    with open("./fjord_content.csv", newline='', mode='w', encoding='UTF-8') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination", "installment"])
 
@@ -60,14 +61,16 @@ def tfbank_eraser():
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["combination","installment","interest","APR","admin"])
 
-bigbank_eraser()
-bobute_eraser()
-credit24_eraser()
-gf_eraser()
-inbank_eraser()
-moki_eraser()
-moment_eraser()
-sb_eraser()
-smspinigai_eraser()
-fjord_eraser()
-vivus_eraser()
+def super_eraser():
+    bigbank_eraser()
+    bobute_eraser()
+    credit24_eraser()
+    gf_eraser()
+    inbank_eraser()
+    moki_eraser()
+    moment_eraser()
+    sb_eraser()
+    smspinigai_eraser()
+    fjord_eraser()
+    vivus_eraser()
+    tfbank_eraser()

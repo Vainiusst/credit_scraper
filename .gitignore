@@ -1,0 +1,8 @@
+__pycache__/
+Include/
+Lib/
+Scripts/
+*.csv
+test_env.py
+vivus.py
+c24.py
