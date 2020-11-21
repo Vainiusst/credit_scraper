@@ -3,49 +3,59 @@ from datetime import timedelta
 import sys
 import csv_eraser
 import csv
-import bigbank
-import bobute
-import c24
-import fjord
-import gf
-import moki
-import moment
-import sb
-import smspinigai
-import tfbank
-import inbank
+from c24 import C24
 
 #Functions defined here:
+
+def csv_checker(input):
+    names = {
+        '1': 'c24',
+        '2': 'bgbank',
+        '3': 'bobute',
+        '4': 'gf',
+        '5': 'inbank',
+        '6': 'moki',
+        '7': 'moment',
+        '8': 'sb',
+        '9': 'smspinigai',
+        '10': 'fjord',
+        '11': 'tfbank'
+    }
+    with open(f'{names[input]}_content.csv', mode='r') as file:
+        return len(list(csv.reader(file)))
+
 
 def scraper():
     print ("What would You like to scrape?\n1. Credit24\n2. BigBank\n3. Bobutės Paskola\n4. General Financing\n"
             "5. InBank\n6. Mokilizingas\n7. Moment Credit\n8. SB lizingas\n9. Smspinigai\n10. Fjordbank\n11. TF bank"
             "\n12. All\n13. Format CSV files\n14. Exit")
-    inp = int(input("Enter your choice's number: "))
+    inp = input("Enter your choice's number: ")
+    inp_int = int(inp)
     start = time.time()
-    if inp == 1:
-        import c24
-    elif inp == 2:
+    if inp_int == 1:
+        csv_checker(inp)
+        C24().main()
+    elif inp_int == 2:
         import bigbank
-    elif inp == 3:
+    elif inp_int == 3:
         import bobute
-    elif inp == 4:
+    elif inp_int == 4:
         import gf
-    elif inp == 5:
+    elif inp_int == 5:
         import inbank
-    elif inp == 6:
+    elif inp_int == 6:
         import moki
-    elif inp == 7:
+    elif inp_int == 7:
         import moment
-    elif inp == 8:
+    elif inp_int == 8:
         import sb
-    elif inp == 9:
+    elif inp_int == 9:
         import smspinigai
-    elif inp == 10:
+    elif inp_int == 10:
         import fjord
-    elif inp == 11:
+    elif inp_int == 11:
         import tfbank
-    elif inp == 12:
+    elif inp_int == 12:
         import bigbank
         import c24
         import fjord
@@ -57,9 +67,9 @@ def scraper():
         import smspinigai
         import bobute
         import tfbank
-    elif inp == 13:
+    elif inp_int == 13:
         csv_eraser.super_eraser()
-    elif inp == 14:
+    elif inp_int == 14:
         sys.exit()
     end = time.time()
     time_spent = timedelta(seconds=end-start)
@@ -68,7 +78,7 @@ def scraper():
     if inpt == "Y" or inpt == 'y':
         scraper()
     else:
-        return
+        sys.exit()
 
 
 #Code happens here:
