@@ -1,29 +1,77 @@
 import time
 from datetime import timedelta
 import sys
-import csv_eraser
 import csv
 from c24 import C24
+from bigbank import Bigbank
 
-#Functions defined here:
 
-def csv_checker(input):
-    names = {
-        '1': 'c24',
-        '2': 'bgbank',
-        '3': 'bobute',
-        '4': 'gf',
-        '5': 'inbank',
-        '6': 'moki',
-        '7': 'moment',
-        '8': 'sb',
-        '9': 'smspinigai',
-        '10': 'fjord',
-        '11': 'tfbank'
+directory = {
+    '1': {
+        "name": "c24",
+        "columns": 4,
+        "module": C24
+    },
+    '2': {
+        "name": 'bigbank',
+        "columns": 2,
+        "module": Bigbank
+    },
+    '3': {
+        "name": "bobute",
+        "columns": 5
+    },
+    '4': {
+        "name": "gf",
+        "columns": 5
+    },
+    '5': {
+        "name": "inbank",
+        "columns": 4
+    },
+    '6': {
+        "name": "moki",
+        "columns": 5
+    },
+    '7': {
+        "name": "moment",
+        "columns": 5
+    },
+    '8': {
+        "name": "sb",
+        "columns": 5
+    },
+    '9': {
+        "name": "smspinigai",
+        "columns": 5
+    },
+    '10': {
+        "name": "fjord",
+        "columns": 2
+    },
+    '11': {
+        "name": "tfbank",
+        "columns": 2
     }
-    with open(f'{names[input]}_content.csv', mode='r') as file:
-        return len(list(csv.reader(file)))
+}
 
+# def csv_checker(dict):
+#     with open(f"{dict}_content.csv", mode='r') as file:
+#         return len(list(csv.reader(file)))
+
+def eraser(dict, input):
+    with open(f"./{dict[input]['name']}_content.csv", newline='', mode='w', encoding='UTF-8') as file:
+        writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        if dict[input]["columns"] == 2:
+            writer.writerow(["combination","installment"])
+        elif dict[input]["columns"] == 4:
+            writer.writerow(["combination", "installment", "interest", "APR"])
+        elif dict[input]["columns"] == 5:
+            writer.writerow(["combination", "installment", "interest", "APR", "admin"])
+
+def super_eraser(dict):
+    for item in dict:
+        eraser(dict[item]["name"], dict[item]["columns"])
 
 def scraper():
     print ("What would You like to scrape?\n1. Credit24\n2. BigBank\n3. Bobutės Paskola\n4. General Financing\n"
@@ -33,8 +81,8 @@ def scraper():
     inp_int = int(inp)
     start = time.time()
     if inp_int == 1:
-        csv_checker(inp)
-        C24().main()
+        eraser(directory, inp)
+        directory[inp]["module"]().main()
     elif inp_int == 2:
         import bigbank
     elif inp_int == 3:
@@ -68,7 +116,7 @@ def scraper():
         import bobute
         import tfbank
     elif inp_int == 13:
-        csv_eraser.super_eraser()
+        super_eraser(arguments)
     elif inp_int == 14:
         sys.exit()
     end = time.time()

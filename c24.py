@@ -6,15 +6,13 @@ from selenium.webdriver.support import expected_conditions as ec
 from time import time
 from datetime import timedelta
 import csv
-import re
-from csv_eraser import credit24_eraser
 
 
 class C24():
     """Class for Credit24's page"""
     def __init__(self):
-        self.amounts = [0, 0.0816327, 0.183673, 0.387755, 0.591837, 0.795918, 1]
         self.chrome = webdriver.Chrome()
+        self.amounts = [0, 0.0816327, 0.183673, 0.387755, 0.591837, 0.795918, 1]
 
     def waiter(self):
         """Waits until necessary elements are loaded and CSS animations stop"""
