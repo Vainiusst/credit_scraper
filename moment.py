@@ -140,5 +140,3 @@ class Moment:
         ending_time = time() # Ending time to check the duration of the program
         total_time = str(timedelta(seconds=ending_time - starting_time))
         print(f"Time to crunch through Moment Credit's data is {total_time} minutes.")
-
-Moment().main()
