@@ -5,6 +5,7 @@ import csv
 from c24 import C24
 from bigbank import Bigbank
 from bobute import Bobute
+from gf import GF
 
 
 directory = {
@@ -25,15 +26,18 @@ directory = {
     },
     '4': {
         "name": "gf",
-        "columns": 5
+        "columns": 5,
+        "module": GF
     },
     '5': {
         "name": "inbank",
-        "columns": 4
+        "columns": 4,
+        "module": Inbank
     },
     '6': {
         "name": "moki",
-        "columns": 5
+        "columns": 5,
+        "module": Moki
     },
     '7': {
         "name": "moment",
@@ -85,26 +89,6 @@ def scraper():
     if inp_int in range(1, 12):
         eraser(directory, inp)
         directory[inp]["module"]().main()
-    # elif inp_int == 2:
-    #     import bigbank
-    # elif inp_int == 3:
-    #     import bobute
-    # elif inp_int == 4:
-    #     import gf
-    # elif inp_int == 5:
-    #     import inbank
-    # elif inp_int == 6:
-    #     import moki
-    # elif inp_int == 7:
-    #     import moment
-    # elif inp_int == 8:
-    #     import sb
-    # elif inp_int == 9:
-    #     import smspinigai
-    # elif inp_int == 10:
-    #     import fjord
-    # elif inp_int == 11:
-    #     import tfbank
     elif inp_int == 12:
         import bigbank
         import c24
