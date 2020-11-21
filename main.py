@@ -6,6 +6,8 @@ from c24 import C24
 from bigbank import Bigbank
 from bobute import Bobute
 from gf import GF
+from inbank import Inbank
+from moki import Moki
 
 
 directory = {
@@ -41,23 +43,28 @@ directory = {
     },
     '7': {
         "name": "moment",
-        "columns": 5
+        "columns": 5,
+        "module": Moment
     },
     '8': {
         "name": "sb",
-        "columns": 5
+        "columns": 5,
+        "module": SB
     },
     '9': {
         "name": "smspinigai",
-        "columns": 5
+        "columns": 5,
+        "module": Smspinigai
     },
     '10': {
         "name": "fjord",
-        "columns": 2
+        "columns": 2,
+        "module": Fjord
     },
     '11': {
         "name": "tfbank",
-        "columns": 2
+        "columns": 2,
+        "module": Tfbank
     }
 }
 
@@ -90,17 +97,11 @@ def scraper():
         eraser(directory, inp)
         directory[inp]["module"]().main()
     elif inp_int == 12:
-        import bigbank
-        import c24
-        import fjord
-        import gf
-        import inbank
-        import moki
-        import moment
-        import sb
-        import smspinigai
-        import bobute
-        import tfbank
+        print("""
+                ---------
+                Construction in progress :D
+                ---------
+                """)
     elif inp_int == 13:
         super_eraser(arguments)
     elif inp_int == 14:

@@ -10,129 +10,135 @@ import csv
 import re
 
 
-#Functions defined here:
+class Moment:
 
-def cookie_monster():
-    # Closes the cookies' pop-up
-    path = '//*[@id="pre_header"]/div/div[2]/input'
-    wdw(chrome, 10).until(ec.element_to_be_clickable((by.XPATH, path)))
-    chrome.find_element_by_xpath(path).click()
+    def __init__(self):
+        self.chrome = webdriver.Chrome()
+        self.amounts = [0, 0.104, 0.132, 0.25, 0.179, 0.035, 0.036, 0.05, 0.05, 0.05, 0.05, 0.05]
+        self.terms = [3, 6, 12, 24, 36, 48, 60]
 
-def set_amount(amount):
-    # Sets the desired amount
-    # Full slider length - 564px
-    sb_width = chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[1]').size["width"]
-    slider = chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[3]')
-    move = ActionChains(chrome)
-    offset = amount * sb_width
-    move.drag_and_drop_by_offset(slider, offset, 0).perform()
+    def cookie_monster(self):
+        """Closes the cookies' pop-up"""
+        path = '//*[@id="pre_header"]/div/div[2]/input'
+        wdw(self.chrome, 10).until(ec.element_to_be_clickable((by.XPATH, path)))
+        self.chrome.find_element_by_xpath(path).click()
 
-def set_term(term):
-    # Selects the desired term from the drop-down
-    selector = Select(chrome.find_element_by_xpath('//*[@id="duration"]'))
-    selector.select_by_value(str(term))
+    def set_amount(self, amount):
+        """Sets the desired amount"""
+        # Full slider length - 564px
+        sb_width = self.chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[1]').size["width"]
+        slider = self.chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[3]')
+        move = ActionChains(self.chrome)
+        offset = amount * sb_width
+        move.drag_and_drop_by_offset(slider, offset, 0).perform()
 
-def read_installment():
-    # Reads and formats the installment to be written into the CSV
-    std_ex = chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
-    iso_str = re.search('mėnesinė įmoka būtų \d+.*\d*,+\d+ EUR', std_ex).group()
-    installment = re.search('\d+.*\d*,+\d+', iso_str).group().replace(".", "")
-    return installment
+    def set_term(self, term):
+        """Selects the desired term from the drop-down"""
+        selector = Select(self.chrome.find_element_by_xpath('//*[@id="duration"]'))
+        selector.select_by_value(str(term))
 
-def read_interest():
-    # Reads and formats the interest rate to be written into the CSV
-    std_ex = chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
-    iso_str = re.search('palūkanos būtų \d+,*\d* %', std_ex).group()
-    interest_iso = re.search('\d+,*\d*', iso_str).group().replace(",", ".")
-    interest_form = str(round(float(interest_iso)/100, 4)).replace(".", ",")
-    return interest_form
+    def read_installment(self):
+        """Reads and formats the installment to be written into the CSV"""
+        std_ex = self.chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
+        iso_str = re.search('mėnesinė įmoka būtų \d+.*\d*,+\d+ EUR', std_ex).group()
+        installment = re.search('\d+.*\d*,+\d+', iso_str).group().replace(".", "")
+        return installment
 
-def read_APR():
-    # Reads and formats the APR to be written into the CSV
-    std_ex = chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
-    iso_str = re.search('BVKKMN . \d+,\d+%', std_ex).group()
-    APR_iso = re.search('\d+,\d+', iso_str).group().replace(",", ".")
-    APR_form = str(round(float(APR_iso)/100, 4)).replace(".", ",")
-    return APR_form
+    def read_interest(self):
+        """Reads and formats the interest rate to be written into the CSV"""
+        std_ex = self.chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
+        iso_str = re.search('palūkanos būtų \d+,*\d* %', std_ex).group()
+        interest_iso = re.search('\d+,*\d*', iso_str).group().replace(",", ".")
+        interest_form = str(round(float(interest_iso)/100, 4)).replace(".", ",")
+        return interest_form
 
-def read_admin(amount):
-    # Reads and formats the admin fee to be written into the CSV
-    std_ex = chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
-    iso_str = re.search('ir \d+,\d* Eur/mėn\.', std_ex).group()
-    admin_str = re.search('\d+,\d*', iso_str).group()
-    if admin_str == '0,00':
-        return admin_str
-    else:
-        admin_perc = float(admin_str.replace(",", "."))/int(amount)
-        admin_perc_str = str(round(admin_perc, 4)).replace(".", ",")
-        return admin_perc_str
+    def read_APR(self):
+        """Reads and formats the APR to be written into the CSV"""
+        std_ex = self.chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
+        iso_str = re.search('BVKKMN . \d+,\d+%', std_ex).group()
+        APR_iso = re.search('\d+,\d+', iso_str).group().replace(",", ".")
+        APR_form = str(round(float(APR_iso)/100, 4)).replace(".", ",")
+        return APR_form
 
-def suma():
-    # Finds the actual amount that is set on the page as opposed to the one that's been passed down as a parameter (sometimes they mismatch)
-    inner = chrome.find_element_by_xpath('//*[@id="amount_slider_wrap"]/div/span/div[3]/span/span[2]').get_attribute("innerHTML")
-    suma = re.search('\d+.\d+ <', inner).group()[:-2]
-    if ' ' in suma:
-        return suma.replace(' ', '')
-    else:
-        return suma
-
-def write_content(term):
-    # Writes all of the content into the CSV file
-    with open('./moment_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
-        sum = suma()
-        combo = f'{sum}/{term}'
-        installment = read_installment()
-        interest = read_interest()
-        APR = read_APR()
-        admin = read_admin(sum)
-        csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        csv_writer.writerow([combo, installment, interest, APR, admin])
-
-
-def do_erryfin(amounts, terms):
-    # Combines all of the actions necessary for the program to work into a single function
-    chrome.maximize_window()
-    chrome.get("https://www.momentcredit.lt")
-    cookie_monster()
-    for term in terms:
-        set_term(term)
-        # The page applies logic and obstructs setting of certain combos
-        # Thus logo has to be appliedhere too, to avoid crashes
-        if term == 3:
-            set_amount(-0.487) #274.668
-            for amount in amounts:
-                set_amount(amount)
-                write_content(term)
-        elif term in [6, 12, 24]:
-            set_amount(-0.987) #556.668
-            for amount in amounts:
-                set_amount(amount)
-                write_content(term)
-        elif term == 36:
-            set_amount(-0.75) #423
-            write_content(term)
-            for amount in amounts[3:]:
-                set_amount(amount)
-                write_content(term)
+    def read_admin(self, amount):
+        """Reads and formats the admin fee to be written into the CSV"""
+        std_ex = self.chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
+        iso_str = re.search('ir \d+,\d* Eur/mėn\.', std_ex).group()
+        admin_str = re.search('\d+,\d*', iso_str).group()
+        if admin_str == '0,00':
+            return admin_str
         else:
-            set_amount(-0.5) #282
-            write_content(term)
-            for amount in amounts[4:]:
-                set_amount(amount)
-                write_content(term)
-    chrome.close()
+            admin_perc = float(admin_str.replace(",", "."))/int(amount)
+            admin_perc_str = str(round(admin_perc, 4)).replace(".", ",")
+            return admin_perc_str
+
+    def suma(self):
+        """Finds the actual amount that is set on the page
+        as opposed to the one that's been passed down as a parameter
+        (sometimes they mismatch)"""
+        path = '//*[@id="amount_slider_wrap"]/div/span/div[3]/span/span[2]'
+        inner = self.chrome.find_element_by_xpath(path).get_attribute("innerHTML")
+        suma = re.search('\d+.\d+ <', inner).group()[:-2]
+        if ' ' in suma:
+            return suma.replace(' ', '')
+        else:
+            return suma
+
+    def write_content(self, term):
+        """Writes all of the content into the CSV file"""
+        with open('./moment_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
+            sum = self.suma()
+            combo = f'{sum}/{term}'
+            installment = self.read_installment()
+            interest = self.read_interest()
+            APR = self.read_APR()
+            admin = self.read_admin(sum)
+            csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([combo, installment, interest, APR, admin])
 
 
-starting_time = time() # Starting time to check the duration of the program
+    def do_erryfin(self, amounts, terms):
+        """Combines all of the actions necessary for the program to work into a single function"""
+        chrome = self.chrome
+        chrome.maximize_window()
+        chrome.get("https://www.momentcredit.lt")
+        self.cookie_monster()
+        for term in self.terms:
+            self.set_term(term)
+            # The page applies logic and obstructs setting of certain combos
+            # Thus logo has to be appliedhere too, to avoid crashes
+            if term == 3:
+                self.set_amount(-0.487) #274.668
+                for amount in self.amounts:
+                    self.set_amount(amount)
+                    self.write_content(term)
+            elif term in [6, 12, 24]:
+                self.set_amount(-0.987) #556.668
+                for amount in self.amounts:
+                    self.set_amount(amount)
+                    self.write_content(term)
+            elif term == 36:
+                self.set_amount(-0.75) #423
+                self.write_content(term)
+                for amount in self.amounts[3:]:
+                    self.set_amount(amount)
+                    self.write_content(term)
+            else:
+                self.set_amount(-0.5) #282
+                self.write_content(term)
+                for amount in self.amounts[4:]:
+                    self.set_amount(amount)
+                    self.write_content(term)
+        self.chrome.close()
 
-chrome = webdriver.Chrome() # Initializing the Chrome Web driver
+    def main(self):
+        """Main method which scrapes the page for information and times the execution."""
+        starting_time = time() # Starting time to check the duration of the program
 
-# Amounts, as offsets for the slider, and terms to be checked
-amounts = [0, 0.104, 0.132, 0.25, 0.179, 0.035, 0.036, 0.05, 0.05, 0.05, 0.05, 0.05]
-terms = [3, 6, 12, 24, 36, 48, 60]
+        self.do_erryfin(self.amounts, self.terms)
 
-do_erryfin(amounts, terms)
+        ending_time = time() # Ending time to check the duration of the program
+        total_time = str(timedelta(seconds=ending_time - starting_time))
+        print(f"Time to crunch through Moment Credit's data is {total_time} minutes.")
 
-ending_time = time() # Ending time to check the duration of the program
-total_time = str(timedelta(seconds=ending_time - starting_time))
-print(f"Time to crunch through Moment Credit's data is {total_time} minutes.")
+Moment().main()
