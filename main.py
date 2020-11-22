@@ -98,8 +98,15 @@ class Scraper:
         for item in dic:
             self.eraser(dic, item)
 
+    def after_scraping(self):
+        response = input("Would You like to do anything else? Press Y if You'd like to scrape some more: ")
+        if response == "Y" or response == 'y':
+            self.scraper()
+        else:
+            sys.exit()
+
     def scraper(self):
-        """Performs the scraper. This is the main method of the program."""
+        """Performs the scraping. This is the main method of the program."""
         print ("What would You like to scrape?\n1. Credit24\n2. BigBank\n3. Bobutės Paskola\n4. General Financing\n"
                 "5. InBank\n6. Mokilizingas\n7. Moment Credit\n8. SB lizingas\n9. Smspinigai\n10. Fjordbank\n11. TF bank"
                 "\n12. All\n13. Format CSV files\n14. Exit")
@@ -110,7 +117,6 @@ class Scraper:
             self.eraser(self.directory, inp)
             self.directory[inp]["module"]().main()
         elif inp_int == 12:
-            self.super_eraser(self.directory)
             for item in self.directory:
                 if self.csv_checker(self.directory[item]["name"]) == 1:
                     self.directory[item]["module"]().main()
@@ -123,12 +129,7 @@ class Scraper:
         end = time.time()
         time_spent = timedelta(seconds=end-start)
         print(f"Wew! That was quite a work! All in all, it took me some {time_spent} minutes to finish with this!")
-        response = input("Would You like to do anything else? Press Y if You'd like to scrape some more: ")
-        if response == "Y" or response == 'y':
-            self.scraper()
-        else:
-            sys.exit()
-
+        self.after_scraping()
 
 #Code happens here:
 
