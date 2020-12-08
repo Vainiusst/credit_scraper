@@ -17,7 +17,7 @@ class C24():
     def waiter(self):
         """Waits until necessary elements are loaded and CSS animations stop"""
         path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[3]/div/div[1]/div/div/div/div/span'
-        wdw(self.chrome, 5).until(ec.text_to_be_present_in_element((by.XPATH, path), "500 €"))
+        wdw(self.chrome, 5).until(ec.text_to_be_present_in_element((by.XPATH, path), "1000 €"))
 
     def cookie_monster(self):
         """Closes the cookies' pop-up"""
@@ -27,20 +27,23 @@ class C24():
 
     def read_installment(self):
         """Reads the installment and returns it properly formatted to be written into the CSV file"""
-        installment = self.chrome.find_element_by_xpath('//*[@id="mainBanner"]/div/div/div/div/div/div/div/div/div/div/div[4]/div/span/div/div')
+        path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[5]/div/span/div/div'
+        installment = self.chrome.find_element_by_xpath(path)
         installment_iso = installment.get_attribute("innerHTML")[:-1]
         return installment_iso
 
     def read_interest(self):
         """Reads the interest and returns it properly formatted to be written into the CSV file"""
-        interest = self.chrome.find_element_by_xpath('//*[@id="mainBanner"]/div/div/div/div/div/div/div/div/div/div/div[7]/span/div/div')
+        path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[8]/span/div/div'
+        interest = self.chrome.find_element_by_xpath(path)
         interest_iso = interest.get_attribute("innerHTML")[:-1].replace(",", ".")
         interest_form = str(round(float(interest_iso)/100, 4)).replace(".", ",")
         return interest_form
 
     def read_APR(self):
         """Reads the APR and returns it properly formatted to be written into the CSV file"""
-        APR = self.chrome.find_element_by_xpath('//*[@id="mainBanner"]/div/div/div/div/div/div/div/div/div/div/div[8]/div/span/div/div')
+        path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[9]/div/span/div/div'
+        APR = self.chrome.find_element_by_xpath(path)
         APR_iso = APR.get_attribute("innerHTML")[:-1].replace(",", ".")
         APR_form = str(round(float(APR_iso) / 100, 4)).replace(".", ",")
         return APR_form
@@ -62,8 +65,8 @@ class C24():
         chrome = self.chrome
         chrome.maximize_window()
         chrome.get("https://credit24.lt/")
-        self.waiter()
         self.cookie_monster()
+        self.waiter()
         move = ActionChains(chrome)
         slider_bar = chrome.find_element_by_xpath(
             '//*[@id="mainBanner"]/div/div/div/div/div/div/div/div/div/div/div[3]/div/div[2]/div/div[1]')
