@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait as wdw
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import ElementClickInterceptedException
 from time import time, sleep
 from datetime import timedelta
 import csv
@@ -47,7 +48,7 @@ class Bobute:
             move_term = ActionChains(self.chrome)
             offset = term * width
             move_term.drag_and_drop_by_offset(slider, offset, 0).perform()
-        except StaleElementReferenceException:
+        except (StaleElementReferenceException, ElementClickInterceptedException):
             # This exception often comes up when the scrolling to the top fails for some reason, thus we need to retry
             self.waiter_scroll()
             self.set_term(width, term)

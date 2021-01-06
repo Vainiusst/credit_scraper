@@ -28,7 +28,7 @@ class Moki:
     def cookie_monster(self):
         """Closes the cookies' pop-up"""
         path = '//*[@id="cookie-btns"]/a[1]'
-        wdw(self.chrome, 10).until(ec.element_to_be_clickable((by.XPATH, path)))
+        wdw(self.chrome, 15).until(ec.element_to_be_clickable((by.XPATH, path)))
         self.chrome.find_element_by_xpath(path).click()
 
     def set_amount(self, amount):

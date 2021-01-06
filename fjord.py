@@ -46,7 +46,7 @@ class Fjord:
     def read_installment(self):
         """Reads the installment and returns it properly formatted to be written in the CSV"""
         path = '//*[@id="root"]/div[1]/div/div[1]/div[1]/div[3]/div[2]/div[2]/div/div[2]'
-        installment = self.chrome.find_element_by_xpath(path).get_attribute("innerHTML")[:-4]
+        installment = self.chrome.find_element_by_xpath(path).get_attribute("innerHTML")[:-2]
         return installment
 
     def write_content(self, amount, term):

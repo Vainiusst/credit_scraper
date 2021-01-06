@@ -27,14 +27,14 @@ class C24():
 
     def read_installment(self):
         """Reads the installment and returns it properly formatted to be written into the CSV file"""
-        path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[5]/div/span/div/div'
+        path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[4]/div/span/div/div'
         installment = self.chrome.find_element_by_xpath(path)
         installment_iso = installment.get_attribute("innerHTML")[:-1]
         return installment_iso
 
     def read_interest(self):
         """Reads the interest and returns it properly formatted to be written into the CSV file"""
-        path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[8]/span/div/div'
+        path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[7]/span/div/div'
         interest = self.chrome.find_element_by_xpath(path)
         interest_iso = interest.get_attribute("innerHTML")[:-1].replace(",", ".")
         interest_form = str(round(float(interest_iso)/100, 4)).replace(".", ",")
@@ -42,7 +42,7 @@ class C24():
 
     def read_APR(self):
         """Reads the APR and returns it properly formatted to be written into the CSV file"""
-        path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[9]/div/span/div/div'
+        path = '//*[@id="mainBanner"]/div[2]/div/div/div/div/div/div/div/div/div/div[6]/span/div/div'
         APR = self.chrome.find_element_by_xpath(path)
         APR_iso = APR.get_attribute("innerHTML")[:-1].replace(",", ".")
         APR_form = str(round(float(APR_iso) / 100, 4)).replace(".", ",")
