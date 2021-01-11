@@ -74,6 +74,14 @@ class Inbank:
         APR_form = str(round(float(APR_iso)/100, 4)).replace(".", ",")
         return APR_form
 
+    def read_contract(self, amount):
+        """Reads and formats the contract fee to be written to CSV"""
+        contract = self.chrome.find_element_by_xpath('//*[@id="loancalculator"]/div[3]/p[1]').get_attribute("innerHTML")
+        contract_line = re.search('sudarymo mokestis - \d+\.\d+', contract).group()
+        contract_iso = re.search('\d+\.\d+', contract_line).group()
+        contract_perc = str(float(contract_iso) / amount).replace(".", ",")
+        return contract_perc
+
     def write_content(self, amount, term):
         """Writes content into the CSV file"""
         with open('./inbank_content.csv', newline='', mode='a', encoding='UTF-8') as db2:
@@ -84,8 +92,9 @@ class Inbank:
                 installment = combo + 'resulted as a NoneType, please check manually'
             interest = self.read_interest()
             APR = self.read_APR()
+            contract = self.read_contract(amount)
             csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([combo, installment, interest, APR])
+            csv_writer.writerow([combo, installment, interest, APR, contract])
 
     def do_erryfin(self, amounts, terms):
         """Combines all the actions necessary for the program to work into a single function"""

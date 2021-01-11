@@ -91,6 +91,12 @@ class Smspinigai:
         admin_str = re.search('\d+,\d+', admin).group()
         return admin_str
 
+    def read_contract(self):
+        """Reads and formats the contract fee to be written into the CSV"""
+        contract = self.chrome.find_element_by_xpath('//*[@id="graph_modal"]/ul/li[2]').get_attribute("innerHTML")[:-2]
+        contract_str = re.search('\d+,\d+', contract).group()
+        return contract_str
+
     def turn_to_proc(self, func):
         """Since read_admin() only acquires admin fee in €, I need to change it to percentage.
         This function does that."""
@@ -122,8 +128,9 @@ class Smspinigai:
             interest = self.read_interest()
             APR = self.read_APR()
             admin = self.turn_to_proc(self.read_admin())
+            contract = self.read_contract()
             csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([combo, installment, interest, APR, admin])
+            csv_writer.writerow([combo, installment, interest, APR, admin, contract])
 
     def close_dets(self):
         """Closes the credit details"""

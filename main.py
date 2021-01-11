@@ -87,11 +87,11 @@ class Scraper:
         with open(f"./{name}_content.csv", newline='', mode='w', encoding='UTF-8') as file:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             if dic[input]["columns"] == 2:
-                writer.writerow(["combination","installment"])
+                writer.writerow(["combination","installment", "contract"])
             elif dic[input]["columns"] == 4:
-                writer.writerow(["combination", "installment", "interest", "APR"])
+                writer.writerow(["combination", "installment", "interest", "APR", "contract"])
             elif dic[input]["columns"] == 5:
-                writer.writerow(["combination", "installment", "interest", "APR", "admin"])
+                writer.writerow(["combination", "installment", "interest", "APR", "admin", "contract"])
 
     def super_eraser(self, dic):
         """Erases and formats all of the CSV files"""

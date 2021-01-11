@@ -72,6 +72,15 @@ class Moment:
             admin_perc_str = str(round(admin_perc, 4)).replace(".", ",")
             return admin_perc_str
 
+    def read_contract(self, amount):
+        """Reads and formats the admin fee to be written into the CSV"""
+        std_ex = self.chrome.find_element_by_xpath('//*[@id="credit_rates_footnote"]/p[2]').get_attribute("innerHTML")
+        iso_str = re.search('dalimis po \d+,\d* Eur,', std_ex).group()
+        contract_str = re.search('\d+,\d*', iso_str).group()
+        contract_perc = float(contract_str.replace(",", "."))/int(amount)
+        contract_perc_str = str(round(contract_perc, 4)).replace(".", ",")
+        return contract_perc_str
+
     def suma(self):
         """Finds the actual amount that is set on the page
         as opposed to the one that's been passed down as a parameter
@@ -93,8 +102,9 @@ class Moment:
             interest = self.read_interest()
             APR = self.read_APR()
             admin = self.read_admin(sum)
+            contract = self.read_contract(sum)
             csv_writer = csv.writer(db2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([combo, installment, interest, APR, admin])
+            csv_writer.writerow([combo, installment, interest, APR, admin, contract])
 
 
     def do_erryfin(self, amounts, terms):
@@ -106,7 +116,7 @@ class Moment:
         for term in self.terms:
             self.set_term(term)
             # The page applies logic and obstructs setting of certain combos
-            # Thus logo has to be appliedhere too, to avoid crashes
+            # Thus logo has to be applied here too, to avoid crashes
             if term == 3:
                 self.set_amount(-0.487) #274.668
                 for amount in self.amounts:
