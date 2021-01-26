@@ -100,7 +100,7 @@ class Scraper:
 
     def after_scraping(self):
         response = input("Would You like to do anything else? Press Y if You'd like to scrape some more: ")
-        if response == "Y" or response == 'y':
+        if response.lower() == "y":
             self.scraper()
         else:
             sys.exit()
@@ -109,7 +109,7 @@ class Scraper:
         """Performs the scraping. This is the main method of the program."""
         print ("What would You like to scrape?\n1. Credit24\n2. BigBank\n3. Bobutės Paskola\n4. General Financing\n"
                 "5. InBank\n6. Mokilizingas\n7. Moment Credit\n8. SB lizingas\n9. Smspinigai\n10. Fjordbank\n11. TF bank"
-                "\n12. All\n13. Format CSV files\n14. Exit")
+                "\n12. All\n13. Weekly report\n14. Format CSV files\n15. Exit")
         inp = input("Enter your choice's number: ")
         inp_int = int(inp)
         start = time.time()
@@ -123,8 +123,13 @@ class Scraper:
                 else:
                     print(f"{self.directory[item]['name']} has been skipped because the corresponding CSV was not empty.")
         elif inp_int == 13:
-            self.super_eraser(self.directory)
+            required_modules = [1, 4, 6, 7, 9]
+            for x in required_modules:
+                self.eraser(self.directory, str(x))
+                self.directory[str(x)]["module"]().main()
         elif inp_int == 14:
+            self.super_eraser(self.directory)
+        elif inp_int == 15:
             sys.exit()
         end = time.time()
         time_spent = timedelta(seconds=end-start)
